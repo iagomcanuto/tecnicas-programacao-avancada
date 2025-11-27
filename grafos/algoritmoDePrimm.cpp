@@ -32,6 +32,7 @@ void menu();
 void plotarLista(int vertices);
 void preencherListaAleatoria(int qtdArestas,int vertices,bool direcionado);
 void ArvoreGeradoraMinima(int vertices);
+void criarArquivoPRIM(int vertices);
 int main(){
     menu();
     return 0;
@@ -376,4 +377,31 @@ void ArvoreGeradoraMinima(int vertices){
     for(i = 0; i<vertices;i++){
         cout << i << " -> " << arvore[i] << "\n";
     }
+    criarArquivoPRIM(vertices);
 }
+void criarArquivoPRIM(int vertices){
+    ofstream arquivo("grafo-prim.dot");
+    string linha;
+    if(!arquivo.is_open()){
+        cout<< "falha ao criar arquivo";
+        return;
+    }
+
+    arquivo << "graph Grafo{\n";
+
+    for(int i = 0 ; i < vertices; i++ ){
+        arquivo << i <<";\n";
+    }
+    for(int i = 0 ; i < vertices; i++){
+        if(arvore[i] == -1){
+            continue;
+        }else{
+            arquivo << arvore[i] << "--" << i << ";\n";
+        }
+    }
+
+    arquivo << "}\n";
+    arquivo.close();
+    cout<< " Arquivo .dot criado ";
+    system("dot -Tpng grafo-prim.dot -o grafo-prim.png");
+};
